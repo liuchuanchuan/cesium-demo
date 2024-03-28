@@ -10,7 +10,7 @@ import { routes } from '@/router'
     <menu>
       <li v-for="item in routes" :key="item.path">
         <router-link :to="item.path">
-          {{ item.name }} {{ item.path }}
+          {{ item.name }}
         </router-link>
       </li>
     </menu>

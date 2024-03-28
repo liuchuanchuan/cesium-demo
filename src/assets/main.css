@@ -20,3 +20,7 @@
 .m-12 { margin: 12px; }
 .m-16 { margin: 16px; }
 .m-20 { margin: 20px; }
+
+.position-relative { position: relative; }
+.position-absolute { position: absolute; }
+.position-fixed { position: fixed; }

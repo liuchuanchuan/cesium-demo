@@ -67,7 +67,7 @@ const init = async () => {
       orientation: new VelocityOrientationProperty(positionProperty),
       path: new PathGraphics({ width: 3 }),
       model: {
-        uri: '/Cesium_Air.glb'
+        uri: '/models/Cesium_Air.glb'
       }
     })
   }

@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import FlightTracker from '../views/FlightTracker.vue'
 import Home from '@/views/HomePage.vue'
+import FlightTracker from '@/views/FlightTracker.vue'
+import FlightPose from '@/views/FlightPose.vue'
 
 export const routes = [
   {
@@ -12,6 +13,11 @@ export const routes = [
     path: '/flight-tracker',
     name: 'FlightTracker',
     component: FlightTracker
+  },
+  {
+    path: '/flight-pose',
+    name: 'FlightPost',
+    component: () => FlightPose
   }
 ]
 

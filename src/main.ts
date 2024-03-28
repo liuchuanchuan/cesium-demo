@@ -4,6 +4,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import { Ion } from 'cesium'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 
 window.CESIUM_BASE_URL = 'cesium/'
 
@@ -17,6 +19,6 @@ Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3ZDM4Y
 
 const app = createApp(App)
 
-app.use(router)
+app.use(router).use(ElementPlus)
 
 app.mount('#app')
