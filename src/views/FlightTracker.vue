@@ -5,7 +5,6 @@ import {
   Color,
   createOsmBuildingsAsync,
   createWorldTerrainAsync,
-  Ion,
   JulianDate,
   PathGraphics,
   SampledPositionProperty,
@@ -16,8 +15,6 @@ import {
 } from 'cesium'
 
 const init = async () => {
-  Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3ZDM4YjYxNy02YmRjLTQ1MmQtYmFkMi0wN2ZlMGQzMmY3YTgiLCJpZCI6MjAzNjgzLCJpYXQiOjE3MTE1MjExODN9.ZMmT-75daWondcFihK1sDR4Uny56wOxI4Xh868JwSQI'
-
   const viewer = new Viewer('cesiumContainer', {
     terrainProvider: await createWorldTerrainAsync()
   })
