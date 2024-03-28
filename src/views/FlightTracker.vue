@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import {
-  Viewer,
   Cartesian3,
   Color,
-  createWorldTerrainAsync,
   createOsmBuildingsAsync,
+  createWorldTerrainAsync,
   Ion,
   JulianDate,
+  PathGraphics,
   SampledPositionProperty,
-  TimeIntervalCollection,
   TimeInterval,
-  PathGraphics
+  TimeIntervalCollection,
+  VelocityOrientationProperty,
+  Viewer
 } from 'cesium'
 
 const init = async () => {
@@ -53,14 +54,27 @@ const init = async () => {
   }
 
   // 相机跟踪目标点
-  viewer.trackedEntity = viewer.entities.add({
-    availability: new TimeIntervalCollection(
-      [new TimeInterval({ start: start, stop: stop })]
-    ),
-    position: positionProperty,
-    point: { pixelSize: 30, color: Color.GREEN },
-    path: new PathGraphics({ width: 3 })
-  })
+  // viewer.trackedEntity = viewer.entities.add({
+  //   availability: new TimeIntervalCollection(
+  //     [new TimeInterval({ start: start, stop: stop })]
+  //   ),
+  //   position: positionProperty,
+  //   point: { pixelSize: 30, color: Color.GREEN },
+  //   path: new PathGraphics({ width: 3 })
+  // })
+
+  const loadModel = async () => {
+    viewer.trackedEntity = viewer.entities.add({
+      availability: new TimeIntervalCollection([new TimeInterval({ start, stop })]),
+      position: positionProperty,
+      orientation: new VelocityOrientationProperty(positionProperty),
+      path: new PathGraphics({ width: 3 }),
+      model: {
+        uri: '/Cesium_Air.glb'
+      }
+    })
+  }
+  loadModel()
 }
 
 onMounted(() => {

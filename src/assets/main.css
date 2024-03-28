@@ -1,1 +1,22 @@
 * { margin: 0; padding: 0; }
+
+.flex { display: flex; }
+.justify-start { justify-content: start; }
+.justify-around { justify-content: space-around; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.items-center { align-items: center; }
+.items-start { align-items: start; }
+.items-end { align-items: end; }
+
+.p-4 { padding: 4px; }
+.p-8 { padding: 8px; }
+.p-12 { padding: 12px; }
+.p-16 { padding: 16px; }
+.p-20 { padding: 20px; }
+
+.m-4 { margin: 4px; }
+.m-8 { margin: 8px; }
+.m-12 { margin: 12px; }
+.m-16 { margin: 16px; }
+.m-20 { margin: 20px; }

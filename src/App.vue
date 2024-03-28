@@ -1,10 +1,6 @@
-<script setup lang="ts">
-import CesiumCom from '@/views/CesiumCom.vue'
-</script>
-
 <template>
   <div class="main">
-    <cesium-com />
+    <router-view />
   </div>
 </template>
 
