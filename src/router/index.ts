@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '@/views/HomePage.vue'
 import FlightTracker from '@/views/FlightTracker.vue'
 import FlightPose from '@/views/FlightPose.vue'
+import XlsxData from '@/views/XlsxData.vue'
 
 export const routes = [
   {
@@ -16,8 +17,13 @@ export const routes = [
   },
   {
     path: '/flight-pose',
-    name: 'FlightPost',
+    name: 'FlightPose',
     component: () => FlightPose
+  },
+  {
+    path: '/xlsx',
+    name: 'XlsxData',
+    component: () => XlsxData
   }
 ]
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // 控制模型姿态
 import { onMounted, ref, watch } from 'vue'
-import { Viewer, Math, HeadingPitchRoll, Transforms, Cartesian3, Entity, Matrix4, Matrix3, Model } from 'cesium'
+import { Viewer, Math, HeadingPitchRoll, Transforms, Cartesian3, Matrix4, Matrix3, Model } from 'cesium'
 
 const viewer = ref<Viewer | undefined>()
 const model = ref<Model | undefined>()
@@ -60,7 +60,6 @@ const handleLocation = () => {
 }
 
 const changePos = () => {
-  console.log(111)
   // 确定矩阵变化的原点
   const { lon, lat, height, scale, offsetX, offsetY, offsetZ, heading, pitch, roll } = formData.value
   const origin = Cartesian3.fromDegrees(lon, lat, height)
