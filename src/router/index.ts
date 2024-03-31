@@ -1,36 +1,30 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Home from '@/views/HomePage.vue'
-import FlightTracker from '@/views/FlightTracker.vue'
-import FlightPose from '@/views/FlightPose.vue'
-import XlsxData from '@/views/XlsxData.vue'
-
 export const routes = [
+  // {
+  //   path: '/xlsx',
+  //   name: 'home',
+  //   component: () => import('@/views/HomePage.vue')
+  // },
+  // {
+  //   path: '/flight-tracker',
+  //   name: 'FlightTracker',
+  //   component: () => import('@/views/FlightTracker.vue')
+  // },
+  // {
+  //   path: '/flight-pose',
+  //   name: 'FlightPose',
+  //   component: () => import('@/views/FlightPose.vue')
+  // },
   {
     path: '/',
-    name: 'home',
-    component: Home,
-    redirect: '/xlsx'
-  },
-  {
-    path: '/flight-tracker',
-    name: 'FlightTracker',
-    component: FlightTracker
-  },
-  {
-    path: '/flight-pose',
-    name: 'FlightPose',
-    component: () => FlightPose
-  },
-  {
-    path: '/xlsx',
     name: 'XlsxData',
-    component: () => XlsxData
+    component: () => import('@/views/XlsxData.vue')
   }
 ]
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
-  routes
+  routes: routes
 })
 
 export default router
