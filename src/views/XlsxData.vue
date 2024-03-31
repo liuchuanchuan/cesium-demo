@@ -5,7 +5,7 @@ import {
   Color,
   HeadingPitchRoll,
   JulianDate,
-  Math,
+  Math, PathGraphics,
   Quaternion,
   SampledPositionProperty,
   SampledProperty,
@@ -86,7 +86,7 @@ const renderXlsxData = () => {
   viewer.value.clock.stopTime = endTime.clone()
   viewer.value.clock.currentTime = beginTime.clone()
   viewer.value.timeline.zoomTo(beginTime, endTime)
-  viewer.value.clock.multiplier = 10
+  viewer.value.clock.multiplier = 30
   viewer.value.clock.shouldAnimate = true
   // 设置位置和姿态
   const positionProperty = new SampledPositionProperty()
@@ -119,6 +119,7 @@ const renderXlsxData = () => {
     availability,
     position: positionProperty,
     orientation: orientationProperty,
+    path: new PathGraphics({ width: 1 }),
     model: {
       uri: '/models/Cesium_Air.glb',
       minimumPixelSize: 128,
