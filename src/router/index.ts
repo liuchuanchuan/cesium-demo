@@ -8,7 +8,8 @@ export const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home
+    component: Home,
+    redirect: '/xlsx'
   },
   {
     path: '/flight-tracker',
