@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import {
   Cartesian3,
   ClockRange,
-  Color,
+  Color, Ellipsoid,
   HeadingPitchRoll,
   JulianDate,
   Math,
@@ -54,6 +54,10 @@ const renderXlsxData = () => {
   viewer.value.clock.multiplier = 30
   viewer.value.clock.shouldAnimate = true
   viewer.value.clock.clockRange = ClockRange.LOOP_STOP
+  viewer.value.clock.shouldAnimate = false
+  currPos.lat = flightData[0].latitude + ''
+  currPos.lon = flightData[0].longitude + ''
+  currPos.height = flightData[0].height + ''
   // 设置位置和姿态
   const positionProperty = new SampledPositionProperty()
   const orientationProperty = new SampledProperty(Quaternion)
@@ -93,12 +97,47 @@ const renderXlsxData = () => {
       maximumScale: 5000
     }
   })
+  viewer.value.clock.onTick.addEventListener(() => {
+    const flightEntity = viewer.value?.entities.getById('flightModel')
+    const curTime = viewer.value?.clock.currentTime as JulianDate
+    const pos = flightEntity?.position?.getValue(curTime, undefined) as Cartesian3
+    const cartographic = Ellipsoid.WGS84.cartesianToCartographic(pos)
+    const lon = Math.toDegrees(cartographic.longitude)
+    const lat = Math.toDegrees(cartographic.latitude)
+    const height = cartographic.height
+    currPos.lat = lat.toFixed(8)
+    currPos.lon = lon.toFixed(8)
+    currPos.height = height.toFixed(8)
+  })
+}
+
+const currPos = reactive<{ lon: string, lat: string, height: string }>({
+  lon: '',
+  lat: '',
+  height: '',
+})
+const shouldAnimate = ref(false)
+const handleClick = () => {
+  shouldAnimate.value = !shouldAnimate.value
+  viewer.value!.clock.shouldAnimate = shouldAnimate.value
 }
 </script>
 
 <template>
   <div class="xlsx-demo position-relative">
     <div id="cesiumContainer"></div>
+    <div class="position-absolute p-8 controller-bar">
+      <el-button type="primary" @click="handleClick">{{ shouldAnimate ? '暂停' : '继续' }}</el-button>
+      <div class="flex items-center justify-start mt-8 full-width">
+        <span class="pr-8">经度</span><span>{{ currPos.lat }}</span>
+      </div>
+      <div class="flex items-center justify-start mt-8 full-width">
+        <span class="pr-8">维度</span><span>{{ currPos.lon }}</span>
+      </div>
+      <div class="flex items-center justify-start mt-8 full-width">
+        <span class="pr-8">高度</span><span>{{ currPos.height }}</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -106,5 +145,13 @@ const renderXlsxData = () => {
 #cesiumContainer {
   height: 100vh;
   width: 100vw;
+}
+.controller-bar {
+  width: 250px;
+  top: 24px;
+  left: 24px;
+  border-radius: 12px;
+  background: rgba(42, 42, 42, 0.8);
+  color: white;
 }
 </style>
