@@ -2,10 +2,12 @@
 import { onMounted, ref } from 'vue'
 import {
   Cartesian3,
+  ClockRange,
   Color,
   HeadingPitchRoll,
   JulianDate,
-  Math, PathGraphics,
+  Math,
+  PathGraphics,
   Quaternion,
   SampledPositionProperty,
   SampledProperty,
@@ -14,20 +16,9 @@ import {
   Transforms,
   Viewer
 } from 'cesium'
-import * as XLSX from 'xlsx'
-
-type FlightData = {
-  longitude: number;
-  latitude: number;
-  height: number;
-  pitch: number;
-  roll: number;
-  heading: number;
-  time: number;
-}
+import flightData from '@/assets/flight.json'
 
 const viewer = ref<Viewer | undefined>()
-const flightData = ref<Array<FlightData>>([])
 
 const initViewer = async () => {
   viewer.value = new Viewer('cesiumContainer', {
@@ -45,41 +36,15 @@ const initViewer = async () => {
 
 onMounted(() => {
   initViewer()
+  renderXlsxData()
 })
 
-const genFlightData = (arrData: any[]): Array<FlightData> => {
-  return arrData.map(item => ({
-    latitude: item['纬度'],
-    longitude: item['经度'],
-    height: item['高度'],
-    pitch: item.pitch,
-    roll: item.roll,
-    heading: item.yaw,
-    time: item['time(s)']
-  }))
-}
-
-const loadXlsxFile = (event: Event) => {
-  const fileList = (event.target as HTMLInputElement).files
-  if (!fileList?.length) {
-    return
-  }
-  const reader = new FileReader()
-  reader.onload = (readEvent) => {
-    const data = readEvent.target?.result
-    const wb = XLSX.read(data, { type: 'binary' })
-    const jsonData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]])
-    flightData.value = genFlightData(jsonData)
-    renderXlsxData()
-  }
-  reader.readAsArrayBuffer(fileList[0])
-}
 const renderXlsxData = () => {
-  if (!viewer.value || !flightData.value.length) {
+  if (!viewer.value) {
     return
   }
   // 设置动画时间
-  const totalSeconds = flightData.value[flightData.value.length - 1].time
+  const totalSeconds = flightData[flightData.length - 1].time
   const beginTime = JulianDate.fromIso8601('2020-03-09T23:10:00Z')
   const endTime = JulianDate.addSeconds(beginTime, totalSeconds, new JulianDate())
   viewer.value.clock.startTime = beginTime.clone()
@@ -88,10 +53,11 @@ const renderXlsxData = () => {
   viewer.value.timeline.zoomTo(beginTime, endTime)
   viewer.value.clock.multiplier = 30
   viewer.value.clock.shouldAnimate = true
+  viewer.value.clock.clockRange = ClockRange.LOOP_STOP
   // 设置位置和姿态
   const positionProperty = new SampledPositionProperty()
   const orientationProperty = new SampledProperty(Quaternion)
-  flightData.value.forEach(({ longitude, latitude, height, heading, roll, pitch, time }) => {
+  flightData.forEach(({ longitude, latitude, height, heading, roll, pitch, time }) => {
     const itemTime = JulianDate.addSeconds(beginTime, time, new JulianDate())
     const position = Cartesian3.fromDegrees(longitude, latitude, height)
     positionProperty.addSample(itemTime, position)
@@ -110,16 +76,17 @@ const renderXlsxData = () => {
     viewer.value!.entities.add({
       description: `位置信息：(${longitude}, ${latitude}, ${height})`,
       position,
-      point: { pixelSize: 3, color: Color.BLUEVIOLET }
+      point: { pixelSize: 3, color: Color.WHITESMOKE }
     })
   })
   // 开始演示动画
   const availability = new TimeIntervalCollection([new TimeInterval({ start: beginTime, stop: endTime })])
   viewer.value.trackedEntity = viewer.value.entities.add({
+    id: 'flightModel',
     availability,
     position: positionProperty,
     orientation: orientationProperty,
-    path: new PathGraphics({ width: 1 }),
+    path: new PathGraphics({ width: 1, leadTime: 0, material: Color.WHITESMOKE }),
     model: {
       uri: '/models/Cesium_Air.glb',
       minimumPixelSize: 128,
@@ -132,9 +99,6 @@ const renderXlsxData = () => {
 <template>
   <div class="xlsx-demo position-relative">
     <div id="cesiumContainer"></div>
-    <div class="form position-absolute background-white p8">
-      <input type="file" @change="loadXlsxFile" accept=".xlsx">
-    </div>
   </div>
 </template>
 
@@ -142,10 +106,5 @@ const renderXlsxData = () => {
 #cesiumContainer {
   height: 100vh;
   width: 100vw;
-}
-
-.form {
-  left: 50px;
-  top: 50px;
 }
 </style>
