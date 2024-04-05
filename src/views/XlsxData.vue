@@ -85,7 +85,6 @@ const renderXlsxData = () => {
   })
   // 开始演示动画
   const availability = new TimeIntervalCollection([new TimeInterval({ start: beginTime, stop: endTime })])
-  const { longitude, latitude, height } = flightData[0]
   const modelLabel = viewer.value.entities.add({
     id: 'flightModel',
     availability,
