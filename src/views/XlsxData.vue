@@ -85,7 +85,8 @@ const renderXlsxData = () => {
   })
   // 开始演示动画
   const availability = new TimeIntervalCollection([new TimeInterval({ start: beginTime, stop: endTime })])
-  viewer.value.trackedEntity = viewer.value.entities.add({
+  const { longitude, latitude, height } = flightData[0]
+  const modelLabel = viewer.value.entities.add({
     id: 'flightModel',
     availability,
     position: positionProperty,
@@ -95,8 +96,10 @@ const renderXlsxData = () => {
       uri: '/models/Cesium_Air.glb',
       minimumPixelSize: 128,
       maximumScale: 5000
-    }
+    },
   })
+  viewer.value.trackedEntity = modelLabel
+  modelLabel.viewFrom = new Cartesian3(300.0, 250.0, 100.0) as any;
   viewer.value.clock.onTick.addEventListener(() => {
     const flightEntity = viewer.value?.entities.getById('flightModel')
     const curTime = viewer.value?.clock.currentTime as JulianDate
@@ -129,10 +132,10 @@ const handleClick = () => {
     <div class="position-absolute p-8 controller-bar">
       <el-button type="primary" @click="handleClick">{{ shouldAnimate ? '暂停' : '继续' }}</el-button>
       <div class="flex items-center justify-start mt-8 full-width">
-        <span class="pr-8">经度</span><span>{{ currPos.lat }}</span>
+        <span class="pr-8">经度</span><span>{{ currPos.lon }}</span>
       </div>
       <div class="flex items-center justify-start mt-8 full-width">
-        <span class="pr-8">维度</span><span>{{ currPos.lon }}</span>
+        <span class="pr-8">维度</span><span>{{ currPos.lat }}</span>
       </div>
       <div class="flex items-center justify-start mt-8 full-width">
         <span class="pr-8">高度</span><span>{{ currPos.height }}</span>
