@@ -129,7 +129,7 @@ const handleClick = () => {
   <div class="xlsx-demo position-relative">
     <div id="cesiumContainer"></div>
     <div class="position-absolute p-8 controller-bar">
-      <el-button type="primary" @click="handleClick">{{ shouldAnimate ? '暂停' : '继续' }}</el-button>
+      <el-button type="primary" @click="handleClick">{{ shouldAnimate ? '暂停' : '开始飞行' }}</el-button>
       <div class="flex items-center justify-start mt-8 full-width">
         <span class="pr-8">经度</span><span>{{ currPos.lon }}</span>
       </div>
